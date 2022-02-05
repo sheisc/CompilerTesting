@@ -7,7 +7,8 @@ from threading import Timer
 CSMITH_HOME = os.getenv("CSMITH_HOME")
 if not CSMITH_HOME:
     CSMITH_HOME = "/home/iron/github/CompilerTesting/csmith/csmith.installed"
-#bug_id = 0
+bug_id = 0
+
 
 # def Popen(*pargs, **kwargs):
 #     try:
@@ -50,11 +51,12 @@ def build(compiler, optimize, src_file, exe_file):
 
 def run(exe_file, timeout_sec=10):
     cmd_line = [exe_file]
+    ouput = "{0}: time out after {1} seconds.\n".format(exe_file, timeout_sec)
     try:
         output = subprocess.check_output(cmd_line, stderr=subprocess.STDOUT, timeout=timeout_sec)
     except Exception as e:
-        return exe_file + ": " + e.__str__()
-    return output
+        return ouput, True
+    return output, False
 
 def save_test_cases(src_file, dest_path, bug_id):
     cmd_line = ["cp", src_file, dest_path+"/bug_" + str(bug_id) + ".c"]
@@ -64,27 +66,29 @@ def save_test_cases(src_file, dest_path, bug_id):
         pass
 
 
-def differ_testing(target_name="test_cast"):
-    bug_id = 0
+def differ_testing(target_name="test_cast", dest_path_prefix="./"):
+    global bug_id
     src_file = target_name + ".c"
     # generate a test case
     res = gen_test_case("csmith", src_file)
     if res:
         # build and run it with gcc
         build("gcc", "-O3", src_file, target_name + ".gcc")
-        output_gcc = run("./" + target_name + ".gcc")
+        output_gcc, time_out_gcc = run("./" + target_name + ".gcc")
         #print(output_gcc)
 
         # build and run it with clang
         build("clang", "-O3", src_file, target_name + ".clang")
-        output_clang = run("./" + target_name + ".clang")
+        output_clang, time_out_clang = run("./" + target_name + ".clang")
         #print(output_clang)
 
         # compare the results
-        if output_gcc != output_clang:
+        if time_out_gcc or time_out_clang:
+            print("Time out")
+        elif output_gcc != output_clang:
             print("output_gcc != output_clang")
             bug_id += 1
-            save_test_cases(src_file, "./", bug_id)
+            save_test_cases(src_file, dest_path_prefix, bug_id)
 
 
 
