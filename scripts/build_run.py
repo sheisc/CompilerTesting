@@ -4,7 +4,9 @@ import subprocess
 import logging
 from threading import Timer
 
-CSMITH_HOME="/home/iron/github/csmith/csmith.installed"
+CSMITH_HOME = os.getenv("CSMITH_HOME")
+if not CSMITH_HOME:
+    CSMITH_HOME = "/home/iron/github/CompilerTesting/csmith/csmith.installed"
 #bug_id = 0
 
 # def Popen(*pargs, **kwargs):
