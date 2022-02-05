@@ -9,6 +9,10 @@
 from build_run import build, run
 import sys
 
+def write_file(filepath, output):
+    with open(filepath, 'wb') as f:
+        f.write(output)
+
 def replay(src_file):
     print(src_file)
     target_name = src_file.split(".")[0]
@@ -24,6 +28,8 @@ def replay(src_file):
         print("time out")
     elif output_clang != output_gcc:
         print("\n\noutput_clang != output_gcc\n")
+        write_file("./" + target_name + ".gcc.txt", output_gcc)
+        write_file("./" + target_name + ".clang.txt", output_clang)
     else:
         print("\n\noutput_clang == output_gcc\n")
 
