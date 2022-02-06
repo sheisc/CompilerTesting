@@ -422,7 +422,7 @@ StatementFor::Output(std::ostream &out, FactMgr* fm, int indent) const
 
 	// added by iron, 2022.02.04
 	output_tab(out, indent+1);
-	out << "printf(\"\%s,\%d\\n\", __FILE__, __LINE__);";
+	out << "printf(\"\%s,\%s,\%d\\n\", __FILE__, __FUNCTION__, __LINE__);";
 	outputln(out);
 
 	body.Output(out, fm, indent+1);

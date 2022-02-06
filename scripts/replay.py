@@ -9,6 +9,8 @@
 from build_run import build, run
 import sys
 
+OPTIMIZATION = "-O3"
+
 def write_file(filepath, output):
     with open(filepath, 'wb') as f:
         f.write(output)
@@ -16,11 +18,11 @@ def write_file(filepath, output):
 def replay(src_file):
     print(src_file)
     target_name = src_file.split(".")[0]
-    build("gcc", "-O3", src_file, target_name + ".gcc")
+    build("gcc", OPTIMIZATION, src_file, target_name + ".gcc")
     output_gcc, timeout = run("./" + target_name + ".gcc")
     print(output_gcc)
 
-    build("clang", "-O3", src_file, target_name + ".clang")
+    build("clang", OPTIMIZATION, src_file, target_name + ".clang")
     output_clang, timeout = run("./" + target_name + ".clang")
     print(output_clang)
 

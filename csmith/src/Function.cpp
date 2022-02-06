@@ -631,7 +631,17 @@ Function::Output(std::ostream &out)
 	if (!fact_changed && !union_field_read && !is_pointer_referenced()) {
 		fm = 0;
 	}
+
+	// added by iron, 2022.02.06
+	out << "{";
+	outputln(out);
+	out << "printf(\"\%s,\%s,\%d\\n\", __FILE__, __FUNCTION__, __LINE__);";
+	outputln(out);
+
 	body->Output(out, fm);
+
+	out << "}";
+	outputln(out);
 
 	if (CGOptions::depth_protect()) {
 		out << "else";
