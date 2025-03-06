@@ -1,8 +1,14 @@
 # CompilerTesting
 
+## Overview
+
+- Use and Customize [CSmith](https://github.com/csmith-project/csmith) to automatically generate C programs.
+
+- Test whether there is any difference in the outputs of the same program compiled by GCC and Clang.
 
 ## How to use
 
+Download [CSmith](https://github.com/csmith-project/csmith) and [LLVM](https://releases.llvm.org/download.html).
 
 Configure the environment variables CSMITH_HOME and LLVM_INSTALL_PATH in scripts/csmith.sh.
 
