@@ -11,7 +11,7 @@ class CSmithThread(threading.Thread):
 		threading.Thread.__init__(self)
 		self.thread_id = thread_id
 		self.stopped = False
-		self.bug_id = 0
+		self.bug_id = 0		
 
 	def differ_testing(self, target_name="test_cast", dest_path_prefix="./"):
 		src_file = target_name + ".c"
@@ -30,8 +30,8 @@ class CSmithThread(threading.Thread):
 
 			# compare the results
 			if time_out_gcc or time_out_clang:
-				print("Time out")
-			elif output_gcc != output_clang:
+				pass
+			elif output_gcc != output_clang and not self.stopped:
 				print("output_gcc != output_clang")
 				self.bug_id += 1
 				save_test_cases(src_file, dest_path_prefix, self.bug_id, self.thread_id)
@@ -41,7 +41,7 @@ class CSmithThread(threading.Thread):
 		cnt = 0
 		while not self.stopped:
 			cnt += 1
-			if cnt % 5 == 0:
+			if cnt % 50 == 1:
 				print("Thread {0}: generating a test case: NO.{1}".format(self.thread_id, cnt))
 			self.differ_testing(target_name)
 		print("Thread {0}: saying goodbye.".format(self.thread_id))
@@ -64,6 +64,6 @@ if __name__ == '__main__':
 		threads.append(cur_thread)
 		cur_thread.start()
 	# Handle the CTRL+c to stop all the threads
-
+	print("You can press CTRL+C to stop all the threads")
 
 

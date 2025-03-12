@@ -6,7 +6,7 @@ from threading import Timer
 
 CSMITH_HOME = os.getenv("CSMITH_HOME")
 if not CSMITH_HOME:
-    CSMITH_HOME = "/home/iron/github/CompilerTesting/csmith/csmith.installed"
+    CSMITH_HOME = "./csmith/csmith.installed"
 bug_id = 0
 
 
@@ -30,9 +30,7 @@ def gen_test_case(csmith, src_file, *csmith_args):
         #print("except Exception as e")
         return False
     res = proc.wait()
-    if res != 0:
-        return False
-    return True
+    return res == 0
 
 
 def build(compiler, optimize, src_file, exe_file):
@@ -45,9 +43,8 @@ def build(compiler, optimize, src_file, exe_file):
 
     output = proc.communicate()[0]
     #print(output)
-    if proc.returncode != 0:
-        return False
-    return True
+    return proc.returncode == 0
+
 
 def run(exe_file, timeout_sec=1):
     cmd_line = [exe_file]
